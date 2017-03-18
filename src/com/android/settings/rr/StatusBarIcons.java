@@ -13,11 +13,16 @@
 */
 package com.android.settings.rr;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContentResolver;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.support.v14.preference.SwitchPreference;
 
@@ -39,9 +44,8 @@ public class StatusBarIcons extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
     private static final String TAG = "StatusBarIcons";
     private static final String VOLTE_SWITCH = "volte_icon_enabled";
-    private TelephonyManager mTelephonyManager;
     private ImsManager mImsManager = null;
-    private Phone phone = null;
+    private static final int EVENT_QUERY_PREFERRED_TYPE_DONE = 1000;
 
     private SwitchPreference mVolteSwitch;
 
@@ -55,10 +59,11 @@ public class StatusBarIcons extends SettingsPreferenceFragment implements
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.rr_sb_icons);
-
-        int number = TelephonyManager.getDefault().getPhoneCount();
+        Handler mHandler = new Handler();
 
         mVolteSwitch = (SwitchPreference) findPreference(VOLTE_SWITCH);
+        mImsManager = ImsManager.getInstance(getActivity().getApplicationContext(),
+                SubscriptionManager.getDefaultVoicePhoneId());
 
         if (mVolteSwitch != null) {
             if (!isImsVolteProvisioned()) {
@@ -68,10 +73,9 @@ public class StatusBarIcons extends SettingsPreferenceFragment implements
     }
 
     private boolean isImsVolteProvisioned() {
-        phone = PhoneFactory.getDefaultPhone();
-        if (phone != null && mImsManager != null) {
-            return mImsManager.isVolteEnabledByPlatform(phone.getContext())
-                && mImsManager.isVolteProvisionedOnDevice(phone.getContext());
+        if (mImsManager != null) {
+            return mImsManager.isVolteEnabledByPlatform(getContext())
+                && mImsManager.isVolteProvisionedOnDevice(getContext());
         }
         return false;
     }
