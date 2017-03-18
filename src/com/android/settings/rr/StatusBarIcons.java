@@ -19,8 +19,15 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.telephony.TelephonyManager;
-import android.telephony.ImsFeatureCapability;
 import android.support.v14.preference.SwitchPreference;
+
+import com.android.ims.ImsConfig;
+import com.android.ims.ImsException;
+import com.android.ims.ImsManager;
+
+import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.PhoneConstants;
+import com.android.internal.telephony.PhoneFactory;
 
 import com.android.internal.logging.MetricsProto.MetricsEvent;
 
@@ -32,7 +39,9 @@ public class StatusBarIcons extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
     private static final String TAG = "StatusBarIcons";
     private static final String VOLTE_SWITCH = "volte_icon_enabled";
-    private ImsFeatureCapability mImsFeatureCapabilities;
+    private TelephonyManager mTelephonyManager;
+    private ImsManager mImsManager = null;
+    private Phone phone = null;
 
     private SwitchPreference mVolteSwitch;
 
@@ -49,16 +58,24 @@ public class StatusBarIcons extends SettingsPreferenceFragment implements
 
         int number = TelephonyManager.getDefault().getPhoneCount();
 
-        mImsFeatureCapabilities = new ImsFeatureCapability();
-
         mVolteSwitch = (SwitchPreference) findPreference(VOLTE_SWITCH);
 
         if (mVolteSwitch != null) {
-            if (!mImsFeatureCapabilities.isVolteEnabled()) {
+            if (!isImsVolteProvisioned()) {
                 getPreferenceScreen().removePreference(mVolteSwitch);
             }
         }
     }
+
+    private boolean isImsVolteProvisioned() {
+        phone = PhoneFactory.getDefaultPhone();
+        if (phone != null && mImsManager != null) {
+            return mImsManager.isVolteEnabledByPlatform(phone.getContext())
+                && mImsManager.isVolteProvisionedOnDevice(phone.getContext());
+        }
+        return false;
+    }
+
 
     public boolean onPreferenceChange(Preference preference, Object objValue) 		{
         return true;
