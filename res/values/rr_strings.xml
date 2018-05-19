@@ -2006,8 +2006,8 @@
     <string name="edge_gestures_back_screen_percent_title">Back gesture must start below this percentage of the screen</string>
     <string name="edge_gestures_back_screen_percent_summary">Trigger below % of screen</string>
 
-    <string name="face_auto_unlock_title">Face auto unlock</string>
-    <string name="face_auto_unlock_summary">Dismiss lockscreen after face unlocking</string>
+    <!-- <string name="face_auto_unlock_title">Face auto unlock</string>
+    <string name="face_auto_unlock_summary">Dismiss lockscreen after face unlocking</string> -->
 
     <!-- Font picker -->
     <string name="font_picker_title">Font</string>
