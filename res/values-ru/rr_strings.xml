@@ -1833,4 +1833,8 @@
   <string name="edge_gestures_landscape_back_edges_title">Трек назад на фоне</string>
   <string name="edge_gestures_back_screen_percent_title">Обратный жест должен начинаться ниже этого процента экрана</string>
   <string name="edge_gestures_back_screen_percent_summary">Триггер ниже% экрана</string>
+
+  <string name="face_auto_unlock_title">Автоматическая разблокировка</string>
+  <string name="face_auto_unlock_summary">Скрыть экран блокировки при разблокировке лицом</string>
+
 </resources>

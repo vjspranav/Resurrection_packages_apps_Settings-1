@@ -235,4 +235,11 @@
             resurrection:emailDev="bdogg718k@gmail.com"/>            
     </PreferenceCategory>             
 
+
+<!-- Author name -->
+        <Preference android:key="author_header"
+                  style="?android:preferenceInformationStyle" 
+                  android:title="@string/author_header" 
+                  android:summary="@string/author_name" />
+
 </PreferenceScreen>
